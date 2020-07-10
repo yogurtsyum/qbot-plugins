@@ -1,7 +1,8 @@
 exports.run = async (client, message, args) => {
   const mention =
         (await message.mentions.members.first()) ||
-        (await message.guild.members.cache.get(args[0]));
+        (await message.guild.members.cache.get(args[0])) ||
+        (await message.guild.members.fetch({ query: args[0], limit: 1 }).first();
   if(!mention) {
     message.channel.send({embed: {
       title: 'Avatar',
