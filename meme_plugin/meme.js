@@ -5,6 +5,9 @@ exports.run = async (client, message, args) => {
     let array = await db.get("memes") || [];
     let mode = args[0];
     if(mode === "add") {
+        if(!message.member.hasPermission('ADMINISTRATOR')) {
+            return message.channel.send("You don't have permission to run this command");
+        }
         let meme = args[1];
         if(!meme) {
             return message.channel.send("You didn't supply a new meme :(");
@@ -22,6 +25,9 @@ exports.run = async (client, message, args) => {
         return message.channel.send("Added meme!");
     }
     if(mode === "remove") {
+        if(!message.member.hasPermission('ADMINISTRATOR')) {
+            return message.channel.send("You don't have permission to run this command");
+        }
         let deletedMeme = args[1];
         if(!deletedMeme) {
             return message.channel.send("Please send a meme link from the meme database to remove!");
@@ -39,8 +45,5 @@ exports.run = async (client, message, args) => {
         return message.channel.send(`There are no memes :( Why don't you add one with ${process.env.prefix}meme add <meme>?`);
     }
     let index3 = Math.round(Math.random() * array.length);
-    if(index3 != 0) {
-        index--;
-    }
     return message.channel.send(array[index3]);
 }
