@@ -2,6 +2,9 @@ const roblox = require('noblox.js');
 require('dotenv').config();
 
 exports.run = async (client, message, args) => {
+    if(!message.member.roles.cache.some(role => ['Payment Permissions'].includes(role.name))) {
+        return message.channel.send("I'm sorry, but it seems like you don't have the correct permissions to run this command. Please ensure that you have the 'Payment Permissions' role");
+    }
     if(!args[0]) {
         return message.channnel.send("Please input a Roblox username!");
     }
