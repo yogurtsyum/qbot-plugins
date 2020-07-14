@@ -2,6 +2,9 @@ const roblox = require('noblox.js');
 require('dotenv').config();
 
 exports.run = async (client, message, args) => {
+    if(!message.member.roles.cache.some(role => ['Get Audit Logs Permission'].includes(role.name))) {
+        return message.channel.send("I'm sorry, but you don't have permission to run this command. Please ensure you have the 'Get Audit Logs Permission' role");
+    }
     if(!args[0]) {
         return message.channel.send("Please provide an action type!");
     }
