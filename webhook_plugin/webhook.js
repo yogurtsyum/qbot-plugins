@@ -1,6 +1,9 @@
 const Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
+    if(message.channel.type !== "dm") {
+        return message.channel.send('This command only works in DMS');
+    }
     let link = args[0];
     if(!link) {
         return message.channel.send("Please provide a webhook link for me to post to!");
