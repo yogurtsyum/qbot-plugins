@@ -15,7 +15,7 @@ exports.run = async (client, message, args) => {
     message.channel.send(`Is the Roblox account: ${username} above the age of 13?`);
     const filter = m => m.author.id === message.author.id;
     const determine = await message.channel.awaitMessages(filter, {max: 1});
-    const answer = determine.first().content;
+    const answer = determine.first().content.toLowerCase();
     if(!answer == "yes" || !answer == "no") {
         return message.channel.send("I'm sorry, but you didn't answer 'yes' or 'no', this has been cancelled.")
     }
