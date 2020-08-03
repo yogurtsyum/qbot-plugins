@@ -1,3 +1,6 @@
+const fs = require('fs');
+const envfile = require('envfile');
+const sourcePath = '.env';
 require('dotenv').config();
 
 exports.run = (client, message, args) => {
@@ -8,6 +11,15 @@ exports.run = (client, message, args) => {
     if(!prefix) {
         return message.channel.send("Please enter a new prefix!");
     }
+    let parsedFile = envfile.parse(sourcePath);
+    parsedFile.token = process.env.token;
+    parsedFile.prefix = prefix;
+    parsedFile.cookie = process.env.cookie;
+    parsedFile.groupId = process.env.groupId;
+    parsedFile.maximumRank = process.env.maximumRank;
+    parsedFile.logchannelid = process.env.logchannelid;
+    parsedFile.shoutchannelid = process.env.shoutchannelid;
+    fs.writeFileSync('./.env', envfile.stringify(parsedFile));
     process.env.prefix = prefix;
-    return message.channel.send("Successfully changed the prefix to " + prefix + ". This will be reverted back to the prefix set in the env file when the bot restarts.");
+    return message.channel.send("Successfully changed the prefix to " + prefix + ".");
 }
