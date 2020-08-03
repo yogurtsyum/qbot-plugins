@@ -48,7 +48,6 @@ exports.run = async (client, message, args) => {
     parsedFile.maximumRank = process.env.maximumRank;
     parsedFile.logchannelid = process.env.logchannelid;
     parsedFile.shoutchannelid = process.env.shoutchannelid;
-    process.env.shoutchannelid;
     fs.writeFileSync('./.env', envfile.stringify(parsedFile));
     process.env.cookie = jar.session;
     roblox.setCookie(jar.session);
