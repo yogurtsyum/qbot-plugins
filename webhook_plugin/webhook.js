@@ -12,7 +12,6 @@ exports.run = async (client, message, args) => {
     if(!args[1]) {
         return message.channel.send("Please provide a message for me to send to this webhook!");
     }
-    message.delete();
     let msg = args.slice(1).join(" ");
     link = link.substring(36, link.length);
     let index = 0;
