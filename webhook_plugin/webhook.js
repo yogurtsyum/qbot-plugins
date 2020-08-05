@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 
 exports.run = async (client, message, args) => {
     if(message.channel.type !== "dm") {
+        message.delete();
         return message.channel.send('This command only works in DMS');
     }
     let link = args[0];
