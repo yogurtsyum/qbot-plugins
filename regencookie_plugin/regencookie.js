@@ -1,3 +1,5 @@
+const username = 'ROBLOX USERNAME HERE';
+const password = 'ROBLOX PASSWORD HERE';
 const roblox = require('noblox.js');
 const fs = require('fs');
 const envfile = require('envfile');
@@ -21,19 +23,6 @@ exports.run = async (client, message, args) => {
         await roblox.unfollow(1);
         return message.channel.send("The cookie that is currently being used is a valid one!");
     }
-    if(!args[0]) {
-        return message.channel.send("Please insert a username!");
-    }
-    try {
-        await roblox.getIdFromUsername(args[0]);
-    } catch {
-        return message.channel.send("The username you provided doesn't exist in the Roblox database!");
-    }
-    if(!args[1]) {
-        return message.channel.send("Please insert a password!");
-    }
-    let username = args[0];
-    let password = args[1];
     let jar = roblox.jar();
     try {
         await roblox.login(username, password, jar);
