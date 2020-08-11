@@ -14,7 +14,7 @@ exports.run = async (client, message, args) => {
         data = [];
     }
     if(!args[0]) {
-        return message.channel.send("Pleae mention a user to blacklist!");
+        return message.channel.send("Please mention a user to blacklist!");
     }
     let user = message.guild.member(message.mentions.users.first()) || message.guild.members.cache.get(args[0]);
     data.push(user.id);
