@@ -3,6 +3,9 @@ require('dotenv').config();
 const suspendedRank = 1; // CHANGE THIS TO THE SUSPENDED RANK ID
 
 exports.run = async (client, message, args) => {
+    if(!message.member.roles.cache.some(role =>["Ranking Permissions"].includes(role.name))) {
+        return message.channel.send('No permission');
+    }
     if(!args[0]) {
         return message.channel.send("Please provide a user to suspend!");
     }
