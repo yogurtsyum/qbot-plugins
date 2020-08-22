@@ -1,3 +1,7 @@
+/ Command made by Roblo_Developer
+// Any suggestions? Feel free to contact me.
+// Feel free to change any of the footers but do not claim that you made this command as it can be completely rude.
+
 const Discord = require("discord.js");
 const roblox = require("noblox.js");
 const errors = require("errors.js");
