@@ -1,7 +1,5 @@
 const Discord = require("discord.js");
 const roblox = require("noblox.js");
-
-const Config = require('../../BotSystems/settings.json');
 const errors = require("../../errors.js");
 module.exports = class test {
     constructor(){
