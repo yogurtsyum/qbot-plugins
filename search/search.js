@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const roblox = require("noblox.js");
-const errors = require("../../errors.js");
+const errors = require("errors.js");
 module.exports = class test {
     constructor(){
             this.name = 'RobloxInfo.js • Lowered Command',
