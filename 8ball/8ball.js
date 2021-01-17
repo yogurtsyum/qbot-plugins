@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 
 const config = {
-	description: 'A magic 8 ball for you to ask questions to.',
+	description: 'A magic 8ball for you to ask questions to.',
 	aliases: ['8ball', 'ball'],
 	usage: '<question>',
 	rolesRequired: ['@everyone'],
