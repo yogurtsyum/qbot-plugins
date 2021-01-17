@@ -9,4 +9,4 @@ This plugin will add a magic 8 ball command.
 * To change/add answers go to `8ball.js` then go to where it says `let replies = ` and in the [] you can change the answers.
 * Template of adding them `["text here", "text here2", "text here"]` and etc.
 
-* I am gessing you know this but where it says text here that is where you put your answers.
+* I am guessing you know this but where it says text here that is where you put your answers.
