@@ -4,7 +4,7 @@ This plugin gets game statistics from game of your choice and will post it in an
 # Instructions
 * Add the MIT license into your editor.
 * Create a file named gamestats.js inside of your commands folder.
-* Copy and paste code from gamestats.js into your editor.
+* Copy and paste the content from gamestats.js into your editor.
 * Replace 'gameId' with the ID of your game.
 
 # Contacts
