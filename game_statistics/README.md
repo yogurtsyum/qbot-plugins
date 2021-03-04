@@ -8,4 +8,4 @@ This plugin gets game statistics from game of your choice and will post it in an
 * Replace 'gameId' with the ID of your game.
 
 # Contacts
-> Questions or concerns? Contact me at nicklaus#540, or in the Support Server.
+> Questions or concerns? Contact me at nicklaus#5400, or in the Support Server.
