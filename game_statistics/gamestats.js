@@ -1,6 +1,6 @@
 // Created by Nicklaus_s (Roblox)
 // Any suggestions? Feel free to contact me.
-// Feel free to change any of the footers, but DO NOT claim you made this code as it is completely immature and rude.
+// Feel free to change any of the footers, but DO NOT claim you wrote this code as it is completely immature and rude.
 
 const Discord = require('discord.js');
 const Roblox = require('noblox.js');
