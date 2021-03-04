@@ -1,5 +1,5 @@
 // Created by Nicklaus_s (Roblox)
-// You may change any of the footers, but DO NOT claim you wrote this code as it is completely immature and rude.
+// You may change any of the footers, but please DO NOT claim you wrote this code as it is completely immature and rude.
 
 const Discord = require('discord.js');
 const Roblox = require('noblox.js');
