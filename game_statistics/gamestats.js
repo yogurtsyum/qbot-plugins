@@ -16,7 +16,7 @@ exports.run = async (client, message, args) => {
         title: `**Game Statistics:**`,
         description: `Player Count: ${placeInfo.OnlineCount} \n Visited Count: ${placeInfo.VisitedCount} \nFavorited Count: ${placeInfo.FavoritedCount} \nUpvote Count: ${placeInfo.TotalUpVotes} \nDownvote Count: ${placeInfo.TotalDownVotes}`,
         footer: {
-            text: `qbot | Game Statistics Plugin | nicklaus#5400`
+            text: `Game Statistics Plugin | nicklaus#5400`
         }
     }});
 };
