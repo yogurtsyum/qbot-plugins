@@ -1,218 +1,39 @@
-exports.run = async (client, message, args) => {
-  if(message.member.hasPermission("KICK_MEMBERS")) {
-    const mention =
-      (await message.mentions.members.first()) ||
-      (await message.guild.members.cache.get(args[0]));
-    if(mention) {
-      if(message.member.roles.highest.position > mention.roles.highest.position) {
-        if(mention.kickable) {
-          if(message.guild.me.hasPermission("KICK_MEMBERS")) {
-            if(mention.id != message.author.id) {
-              if(args[1]) {
-                mention.kick({reason: `Kicked by ${message.author.tag} with reason: ${args.slice(1).join(" ")}`})
-              } else {
-                mention.kick({reason: `Kicked by ${message.author.tag}, no reason given.`})
-              }
-              message.channel.send({embed: {
-                color: 9240450,
-                description: `Successfully kicked <@${mention.id}>!`,
-                author: {
-                  name: message.author.tag,
-                  icon_url: message.author.displayAvatarURL()
-                }
-              }})
-              if(process.env.logchannelid === 'false') return;
-              let logchannel = await message.guild.channels.cache.get(process.env.logchannelid);
-              if(args[1]) {
-                return logchannel.send({embed: {
-                color: 2127726,
-                description: `<@${message.author.id}> (${message.author.tag}) kicked <@${mention.id}> (${mention.user.tag}) with reason ${args.slice(1).join(" ")}.`,
-                author: {
-                  name: message.author.tag,
-                  icon_url: message.author.displayAvatarURL()
-                },
-                footer: {
-                  text: 'Kick Logs'
-                },
-                timestamp: new Date(),
-                }})
-              } else {
-                return logchannel.send({embed: {
-                  color: 2127726,
-                  description: `<@${message.author.id}> (${message.author.tag}) kicked <@${mention.id}> (${mention.user.tag}) with no reason.`,
-                  author: {
-                    name: message.author.tag,
-                    icon_url: message.author.displayAvatarURL()
-                  },
-                  footer: {
-                    text: 'Kick Logs'
-                  },
-                  timestamp: new Date(),
-                }})
-              }
-            } else return message.channel.send({embed: {
-              color: 16733013,
-              description: `You cannot kick yourself!`,
-              author: {
-                name: message.author.tag,
-                icon_url: message.author.displayAvatarURL()
-              }
-            }})
-          } else return message.channel.send({embed: {
-            color: 16733013,
-            description: `I need the \`KICK_MEMBERS\` permission!`,
-            author: {
-              name: message.author.tag,
-              icon_url: message.author.displayAvatarURL()
-            }
-          }})
-        } else return message.channel.send({embed: {
-          color: 16733013,
-          description: `My role is not high enough to kick this person!`,
-          author: {
-            name: message.author.tag,
-            icon_url: message.author.displayAvatarURL()
-          }
-        }})
-      } else return message.channel.send({embed: {
-        color: 16733013,
-        description: `Your highest role is too low to kick this person!`,
-        author: {
-          name: message.author.tag,
-          icon_url: message.author.displayAvatarURL()
-        }
-      }})
-    } else {
-      let findname = await message.guild.members.fetch({query: args[0], limit: 1});
-      if(findname.first()) {
-        let filter = (msg) => msg.author.id === message.author.id;
-        const msg = await message.channel.send({embed: {
-          color: 39423,
-          description: `Do you want to kick <@${findname.first().id}> (${findname.first().user.tag})?`,
-          author: {
-            name: message.author.tag,
-            icon_url: message.author.displayAvatarURL()
-          },
-          footer: {
-            text: `Options: yes | no`
-          }
-        }});
-        message.channel.awaitMessages(filter, { max: 1, time: 60000 }).then(async collected => {
-          if (collected.size === 0) {
-            message.channel.send({embed: {
-              description: `You took to long.`,
-              color: 16733013,
-              author: {
-                name: message.author.tag,
-                icon_url: message.author.displayAvatarURL()
-              }
-            }});
-          } else {
-            let answer = collected.first().content.toLowerCase();
-            if(answer === "yes") {
-              if(message.member.roles.highest.position > findname.first().roles.highest.position) {
-                if(findname.first().kickable) {
-                  if(message.guild.me.hasPermission("KICK_MEMBERS")) {
-                    if(findname.first().id != message.author.id) {
-                      findname.first().kick(args.slice(1).join(" "))
-                      message.channel.send({embed: {
-                        color: 9240450,
-                        description: `Successfully kicked <@${findname.first().id}>!`,
-                        author: {
-                          name: message.author.tag,
-                          icon_url: message.author.displayAvatarURL()
-                        }
-                      }})
-                      if(process.env.logchannelid === 'false') return;
-                      let logchannel = await message.guild.channels.cache.get(process.env.logchannelid);
-                      if(args[1]) {
-                        return logchannel.send({embed: {
-                          color: 2127726,
-                          description: `<@${message.author.id}> (${message.author.tag}) kicked <@${findname.first().id}> (${findname.first().user.tag}) with reason ${args.slice(1).join(" ")}.`,
-                          author: {
-                            name: message.author.tag,
-                            icon_url: message.author.displayAvatarURL()
-                          },
-                          footer: {
-                            text: 'Kick Logs'
-                          },
-                          timestamp: new Date(),
-                        }})
-                      } else {
-                        return logchannel.send({embed: {
-                          color: 2127726,
-                          description: `<@${message.author.id}> (${message.author.tag}) kicked <@${findname.first().id}> (${findname.first().user.tag}) with no reason.`,
-                          author: {
-                            name: message.author.tag,
-                            icon_url: message.author.displayAvatarURL()
-                          },
-                          footer: {
-                            text: 'Kick Logs'
-                          },
-                          timestamp: new Date(),
-                        }})
-                      }
-                    } else return message.channel.send({embed: {
-                            color: 16733013,
-                            description: `You cannot kick yourself!`,
-                            author: {
-                              name: message.author.tag,
-                              icon_url: message.author.displayAvatarURL()
-                            }
-                          }})
-                        } else return message.channel.send({embed: {
-                          color: 16733013,
-                          description: `I need the \`KICK_MEMBERS\` permission!`,
-                          author: {
-                            name: message.author.tag,
-                            icon_url: message.author.displayAvatarURL(),
-                          }
-                        }})
-                  } else return message.channel.send({embed: {
-                    color: 16733013,
-                    description: `My role is not high enough to kick this person!`,
-                    author: {
-                      name: message.author.tag,
-                      icon_url: message.author.displayAvatarURL()
-                    }
-                  }})
-                } else return message.channel.send({embed: {
-                  color: 16733013,
-                  description: `Your highest role is too low to kick this person!`,
-                  author: {
-                    name: message.author.tag,
-                    icon_url: message.author.displayAvatarURL()
-                  }
-                }})
-            } else if(answer === "no") {
-              return message.channel.send({embed: {
-                description: `Did not kick them.`,
-                color: 9240450,
-                author: {
-                  name: message.author.tag,
-                  icon_url: message.author.displayAvatarURL()
-                }
-              }})
-            } else return message.channel.send({embed: {
-              description: `That is not a valid option!`,
-              color: 16733013,
-              author: {
-                name: message.author.tag,
-                icon_url: message.author.displayAvatarURL()
-              }
-            }})
-          }
-        })
-      } else return message.channel.send({embed: {
-        description: `Please mention or say someones name!`
-      }})
+const { MessageEmbed } = require("discord.js")
+
+const config = {
+    description: 'Kick\'s the mentioned member with the reason if provided.',
+    aliases: ['k'],
+    usage: '<member> [reason]',
+    rolesRequired: [],
+    category: 'Moderation'
+}
+
+module.exports = {
+    config,
+    run: async (client, message, args) => {
+        const embed = new MessageEmbed().setColor(client.config.colors.error).setAuthor(message.author.tag, message.author.displayAvatarURL({dynamic: true}))
+        if(!message.member.hasPermission("KICK_MEMBERS")) {embed.setDescription("You need the `KICK_MEMBERS` permission to use this command!"); return message.channel.send(embed)}
+        if(!message.guild.me.hasPermission("KICK_MEMBERS")) {embed.setDescription("I do not have permission to kick people! Please give me the `KICK_MEMBERS` permission!"); return message.channel.send(embed)}
+        let mention = message.mentions.members.first()
+        if(!mention && !isNaN(args[0]) && args[0]) try {mention = await client.users.fetch(args[0])} catch (err) {}
+        if(!mention && args[0] && isNaN(args[0])) try {mention = await message.guild.members.fetch({query: args[0], limit: 1})} catch (err) {}
+        if(!mention) {embed.setDescription("You did not provide anyone to kick!"); return message.channel.send(embed)}
+        mention = message.guild.member(mention)
+        if(!mention) {embed.setDescription("I cannot kick this person as they are not in the server!"); return message.channel.send(embed)}
+        if(mention.id === message.author.id) {embed.setDescription("You cannot kick yourself!"); return message.channel.send(embed)}
+        if(mention.roles && !message.member.roles.highest.position > mention.roles.highest.position) {embed.setDescription("Your highest role is too low to kick this member!"); return message.channel.send(embed)}
+        if(mention.roles && !mention.kickable) {embed.setDescription("I cannot kick this member! Please insure my role is higher than who you mentioned!"); return message.channel.send(embed)}
+        let good = true
+        try {await mention.kick(`${args.slice(1).join(" ") ? `${message.author.tag} (${message.author.id}) Kicked this user with the following reason:\n${args.slice(1).join(" ")}` : `${message.author.tag} (${message.author.id}) Kicked this user with no reason.`}`)} catch (error) {console.log(err); good = false}
+        if(good) {embed.setDescription(`Successfully kicked ${mention.tag? mention.tag : mention.user.tag}!`).setColor(client.config.colors.success)} else {embed.setDescription('Oops! An unexpected error has occured. The bot owner can check the bot logs for more information.')}
+        message.channel.send(embed)
+        if(!good) return
+        if(client.config.logChannelId == "false") return
+        let logchannel = await client.channels.fetch(client.config.logChannelId)
+        embed.setDescription(`**Moderator:** <@${message.author.id}> (\`${message.author.id}\`)\n**Action:** Kick\n**User:** <@${mention.id}> (\`${mention.id}\`)\n**Reason:** ${args.slice(1).join(" ") ? args.slice(1).join(" ") : `No reason provided!`}`)
+             .setColor(client.config.colors.info)
+             .setTimestamp()
+             .setThumbnail(mention.user.displayAvatarURL({dynamic: true}))
+        return logchannel.send(embed)
     }
-  } else return message.channel.send({embed:{
-    description: "You need the `KICK_MEMBERS` permission to use this command.",
-    color: 16733013,
-    author: {
-      name: message.author.tag,
-      icon_url: message.author.displayAvatarURL()
-    }
- }})
 }

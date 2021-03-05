@@ -1,218 +1,42 @@
-exports.run = async (client, message, args) => {
-  if(message.member.hasPermission("BAN_MEMBERS")) {
-    const mention =
-      (await message.mentions.members.first()) ||
-      (await message.guild.members.cache.get(args[0]));
-    if(mention) {
-      if(message.member.roles.highest.position > mention.roles.highest.position) {
-        if(mention.bannable) {
-          if(message.guild.me.hasPermission("BAN_MEMBERS")) {
-            if(mention.id != message.author.id) {
-              if(args[1]) {
-                mention.ban({reason: `Banned by ${message.author.tag} with reason: ${args.slice(1).join(" ")}`})
-              } else {
-                mention.ban({reason: `Banned by ${message.author.tag}, no reason given.`})
-              }
-              message.channel.send({embed: {
-                color: 9240450,
-                description: `Successfully banned <@${mention.id}>!`,
-                author: {
-                  name: message.author.tag,
-                  icon_url: message.author.displayAvatarURL()
-                }
-              }})
-              if(process.env.logchannelid === 'false') return;
-              let logchannel = await message.guild.channels.cache.get(process.env.logchannelid);
-              if(args[1]) {
-                return logchannel.send({embed: {
-                color: 2127726,
-                description: `<@${message.author.id}> (${message.author.tag}) banned <@${mention.id}> (${mention.user.tag}) with reason ${args.slice(1).join(" ")}.`,
-                author: {
-                  name: message.author.tag,
-                  icon_url: message.author.displayAvatarURL()
-                },
-                footer: {
-                  text: 'Ban Logs'
-                },
-                timestamp: new Date(),
-                }})
-              } else {
-                return logchannel.send({embed: {
-                  color: 2127726,
-                  description: `<@${message.author.id}> (${message.author.tag}) banned <@${mention.id}> (${mention.user.tag}) with no reason.`,
-                  author: {
-                    name: message.author.tag,
-                    icon_url: message.author.displayAvatarURL()
-                  },
-                  footer: {
-                    text: 'Ban Logs'
-                  },
-                  timestamp: new Date(),
-                }})
-              }
-            } else return message.channel.send({embed: {
-              color: 16733013,
-              description: `You cannot ban yourself!`,
-              author: {
-                name: message.author.tag,
-                icon_url: message.author.displayAvatarURL()
-              }
-            }})
-          } else return message.channel.send({embed: {
-            color: 16733013,
-            description: `I need the \`BAN_MEMBERS\` permission!`,
-            author: {
-              name: message.author.tag,
-              icon_url: message.author.displayAvatarURL()
-            }
-          }})
-        } else return message.channel.send({embed: {
-          color: 16733013,
-          description: `My role is not high enough to ban this person!`,
-          author: {
-            name: message.author.tag,
-            icon_url: message.author.displayAvatarURL()
-          }
-        }})
-      } else return message.channel.send({embed: {
-        color: 16733013,
-        description: `Your highest role is too low to ban this person!`,
-        author: {
-          name: message.author.tag,
-          icon_url: message.author.displayAvatarURL()
-        }
-      }})
-    } else {
-      let findname = await message.guild.members.fetch({query: args[0], limit: 1});
-      if(findname.first()) {
-        let filter = (msg) => msg.author.id === message.author.id;
-        const msg = await message.channel.send({embed: {
-          color: 39423,
-          description: `Do you want to ban <@${findname.first().id}> (${findname.first().user.tag})?`,
-          author: {
-            name: message.author.tag,
-            icon_url: message.author.displayAvatarURL()
-          },
-          footer: {
-            text: `Options: yes | no`
-          }
-        }});
-        message.channel.awaitMessages(filter, { max: 1, time: 60000 }).then(async collected => {
-          if (collected.size === 0) {
-            message.channel.send({embed: {
-              description: `You took to long.`,
-              color: 16733013,
-              author: {
-                name: message.author.tag,
-                icon_url: message.author.displayAvatarURL()
-              }
-            }});
-          } else {
-            let answer = collected.first().content.toLowerCase();
-            if(answer === "yes") {
-              if(message.member.roles.highest.position > findname.first().roles.highest.position) {
-                if(findname.first().bannable) {
-                  if(message.guild.me.hasPermission("BAN_MEMBERS")) {
-                    if(findname.first().id != message.author.id) {
-                      findname.first().ban(args.slice(1).join(" "))
-                      message.channel.send({embed: {
-                        color: 9240450,
-                        description: `Successfully banned <@${findname.first().id}>!`,
-                        author: {
-                          name: message.author.tag,
-                          icon_url: message.author.displayAvatarURL()
-                        }
-                      }})
-                      if(process.env.logchannelid === 'false') return;
-                      let logchannel = await message.guild.channels.cache.get(process.env.logchannelid);
-                      if(args[1]) {
-                        return logchannel.send({embed: {
-                          color: 2127726,
-                          description: `<@${message.author.id}> (${message.author.tag}) banned <@${findname.first().id}> (${findname.first().user.tag}) with reason ${args.slice(1).join(" ")}.`,
-                          author: {
-                            name: message.author.tag,
-                            icon_url: message.author.displayAvatarURL()
-                          },
-                          footer: {
-                            text: 'Ban Logs'
-                          },
-                          timestamp: new Date(),
-                        }})
-                      } else {
-                        return logchannel.send({embed: {
-                          color: 2127726,
-                          description: `<@${message.author.id}> (${message.author.tag}) banned <@${findname.first().id}> (${findname.first().user.tag}) with no reason.`,
-                          author: {
-                            name: message.author.tag,
-                            icon_url: message.author.displayAvatarURL()
-                          },
-                          footer: {
-                            text: 'Ban Logs'
-                          },
-                          timestamp: new Date(),
-                        }})
-                      }
-                    } else return message.channel.send({embed: {
-                            color: 16733013,
-                            description: `You cannot ban yourself!`,
-                            author: {
-                              name: message.author.tag,
-                              icon_url: message.author.displayAvatarURL()
-                            }
-                          }})
-                        } else return message.channel.send({embed: {
-                          color: 16733013,
-                          description: `I need the \`BAN_MEMBERS\` permission!`,
-                          author: {
-                            name: message.author.tag,
-                            icon_url: message.author.displayAvatarURL(),
-                          }
-                        }})
-                  } else return message.channel.send({embed: {
-                    color: 16733013,
-                    description: `My role is not high enough to ban this person!`,
-                    author: {
-                      name: message.author.tag,
-                      icon_url: message.author.displayAvatarURL()
-                    }
-                  }})
-                } else return message.channel.send({embed: {
-                  color: 16733013,
-                  description: `Your highest role is too low to ban this person!`,
-                  author: {
-                    name: message.author.tag,
-                    icon_url: message.author.displayAvatarURL()
-                  }
-                }})
-            } else if(answer === "no") {
-              return message.channel.send({embed: {
-                description: `Did not ban them.`,
-                color: 9240450,
-                author: {
-                  name: message.author.tag,
-                  icon_url: message.author.displayAvatarURL()
-                }
-              }})
-            } else return message.channel.send({embed: {
-              description: `That is not a valid option!`,
-              color: 16733013,
-              author: {
-                name: message.author.tag,
-                icon_url: message.author.displayAvatarURL()
-              }
-            }})
-          }
-        })
-      } else return message.channel.send({embed: {
-        description: `Please mention or say someones name!`
-      }})
+const { MessageEmbed } = require("discord.js")
+
+const config = {
+    description: 'Ban\'s the mentioned member with the reason if provided.',
+    aliases: ['b'],
+    usage: '<member> [reason]',
+    rolesRequired: [],
+    category: 'Moderation'
+}
+
+module.exports = {
+    config,
+    run: async (client, message, args) => {
+        const embed = new MessageEmbed().setColor(client.config.colors.error).setAuthor(message.author.tag, message.author.displayAvatarURL({dynamic: true}))
+        if(!message.member.hasPermission("BAN_MEMBERS")) {embed.setDescription("You need the `BAN_MEMBERS` permission to use this command!"); return message.channel.send(embed)}
+        if(!message.guild.me.hasPermission("BAN_MEMBERS")) {embed.setDescription("I do not have permission to ban people! Please give me the `BAN_MEMBERS` permission!"); return message.channel.send(embed)}
+        let mention = message.mentions.members.first()
+        if(!mention && !isNaN(args[0]) && args[0]) try {mention = await client.users.fetch(args[0])} catch (err) {}
+        if(!mention && args[0] && isNaN(args[0])) try {mention = await message.guild.members.fetch({query: args[0], limit: 1})} catch (err) {}
+        if(!mention) {embed.setDescription("You did not provide anyone to ban!"); return message.channel.send(embed)}
+        let user = message.guild.member(mention)
+        if(user) mention = user
+        let banned
+        try {banned = await message.guild.fetchBan(mention.id)} catch (err) {}
+        if(banned) {embed.setDescription("That person is already banned!"); return message.channel.send(embed)}
+        if(mention.id === message.author.id) {embed.setDescription("You cannot ban yourself!"); return message.channel.send(embed)}
+        if(mention.roles && !message.member.roles.highest.position > mention.roles.highest.position) {embed.setDescription("Your highest role is too low to ban this member!"); return message.channel.send(embed)}
+        if(mention.roles && !mention.bannable) {embed.setDescription("I cannot ban this member! Please insure my role is higher than who you mentioned!"); return message.channel.send(embed)}
+        let good = true
+        try {await message.guild.members.ban(mention, {reason: `${args.slice(1).join(" ") ? `${message.author.tag} (${message.author.id}) Banned this user with the following reason:\n${args.slice(1).join(" ")}` : `${message.author.tag} (${message.author.id}) Banned this user with no reason.`}`})} catch (error) {console.log(err); good = false}
+        if(good) {embed.setDescription(`Successfully banned ${mention.tag? mention.tag : mention.user.tag}!`).setColor(client.config.colors.success)} else {embed.setDescription('Oops! An unexpected error has occured. The bot owner can check the bot logs for more information.')}
+        message.channel.send(embed)
+        if(!good) return
+        if(client.config.logChannelId == "false") return
+        let logchannel = await client.channels.fetch(client.config.logChannelId)
+        embed.setDescription(`**Moderator:** <@${message.author.id}> (\`${message.author.id}\`)\n**Action:** Ban\n**User:** <@${mention.id}> (\`${mention.id}\`)\n**Reason:** ${args.slice(1).join(" ") ? args.slice(1).join(" ") : `No reason provided!`}`)
+             .setColor(client.config.colors.info)
+             .setTimestamp()
+             .setThumbnail(mention.user.displayAvatarURL({dynamic: true}))
+        return logchannel.send(embed)
     }
-  } else return message.channel.send({embed:{
-    description: "You need the `BAN_MEMBERS` permission to use this command.",
-    color: 16733013,
-    author: {
-      name: message.author.tag,
-      icon_url: message.author.displayAvatarURL()
-    }
- }})
 }
