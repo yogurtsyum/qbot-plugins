@@ -24,7 +24,7 @@ module.exports = {
         if(!message.member.roles.highest.position > mention.roles.highest.position) {embed.setDescription("Your highest role is too low to mute this member!"); return message.channel.send(embed)}
         if(!mention.manageable) {embed.setDescription("I cannot manage this member! Please insure my role is higher than who you mentioned!"); return message.channel.send(embed)}
         if(!client.config.mutedRole) {embed.setDescription("There is no muted role in the config.js file! Plesae add the following to your config.js file: ```js\nmutedRole: \"muted role ID here\"```"); return message.channel.send(embed)}
-        if(!message.guild.roles.cache.get(mutedRole)) {embed.setDescription("The muted role ID in the config.js file is not valid! Please put a valid role ID!"); return message.channel.send(embed)}
+        if(!message.guild.roles.cache.get(client.config.mutedRole)) {embed.setDescription("The muted role ID in the config.js file is not valid! Please put a valid role ID!"); return message.channel.send(embed)}
         if(mention.roles.cache.some(role => client.config.mutedRole === role.id)) {embed.setDescription("That person is already muted!"); return message.channel.send(embed)}
         let good = true
         try {await mention.roles.add(client.config.mutedRole, `${args.slice(1).join(" ") ? `${message.author.tag} (${message.author.id}) Muted this user with the following reason:\n${args.slice(1).join(" ")}` : `${message.author.tag} (${message.author.id}) Muted this user with no reason.`}`)} catch (error) {console.log(err); good = false}
