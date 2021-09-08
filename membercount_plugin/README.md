@@ -6,7 +6,7 @@
 
 ## Instalation
 * Open the bot terminal/repl.it shell.
-* Run `wget -O commands/membercount.js https://raw.githubusercontent.com/yogurtsyum/qbot-plugins/master/membercount_plugin/membercount.js`
+* Run `wget -O src/commands/membercount.js https://raw.githubusercontent.com/yogurtsyum/qbot-plugins/master/membercount_plugin/membercount.js`
 * Run `wget -O membercount_plugin_LICENSE https://raw.githubusercontent.com/yogurtsyum/qbot-plugins/master/membercount_plugin/LICENSE`
 * Restart the bot.
 
