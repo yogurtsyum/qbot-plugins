@@ -1,0 +1,25 @@
+exports.run = async (client, message, args) => {
+const { MessageEmbed } = require('discord.js')
+const split = message.content.split(" ");
+const suggestion = split.splice(1).join(" ");
+
+if (!suggestion) {
+    message.reply('you must specify a suggestion to suggest!')
+  } else {
+    
+let suggestionchannel = await message.guild.channels.cache.get(process.env.suggestionchannelid);
+const e = new MessageEmbed()
+.setColor('#ffa500')
+.addField('Suggestion:', suggestion)
+.addField('Suggested by:', `<@${message.author.id}>`)
+.setTimestamp()
+
+suggestionchannel.send(e).then(sentMessage => {
+  sentMessage.react("👍") 
+  sentMessage.react("🤷")
+  sentMessage.react("👎")
+});
+
+message.channel.send('Your suggestion has been sent successfully!')
+}
+}
